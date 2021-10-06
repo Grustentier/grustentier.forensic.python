@@ -77,6 +77,7 @@ if __name__ == "__main__":
             if len(image) == 0:
                 print("Could not process cropped image file:",root + file)
                 continue
+            
             cv2.imwrite(exportDirPath+file,image)  
             sys.stdout.write(".")
             sys.stdout.flush()

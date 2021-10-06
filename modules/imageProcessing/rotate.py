@@ -67,6 +67,7 @@ if __name__ == "__main__":
             if image is None:
                 print("Could not process file:",root + file)
                 continue
+            
             rotated = imutils.rotate_bound(image, arguments.angle)
             cv2.imwrite(exportDirPath+file,rotated)
             sys.stdout.write(".")
