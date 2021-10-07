@@ -141,8 +141,7 @@ def getSubDirectories(dirname):
         subfolders.extend(getSubDirectories(dirname))
     return sorted(subfolders)
  
-def findVideo(parentLabelDir):   
-    
+def findVideo(parentLabelDir):    
     videoName2Find = str(parentLabelDir).split("/")[-1]     
     videoName2Find = cleanString(videoName2Find)
     parentDirVideoName2Find = str(parentLabelDir).split("/")[-2]  
@@ -209,13 +208,13 @@ if __name__ == "__main__":
         CLASSES_FROM_PARAMETER.append(str(arguments.classes))  
         
     step = 0
+    printProgress(step,len(labelDirs))          
+    
     for labelDir in labelDirs: 
         step += 1    
         
         parentDirPath = os.path.abspath(os.path.join(labelDir, os.pardir)) 
-        parentDirName = str(parentDirPath).split("/")[-1]     
-        
-        print("process label dir of parent",parentDirPath)    
+        parentDirName = str(parentDirPath).split("/")[-1]
         
         currentVideoPath = findVideo(parentDirPath)
         if currentVideoPath is None:
