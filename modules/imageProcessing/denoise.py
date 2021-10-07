@@ -32,13 +32,32 @@ parser.add_argument('--export_dir', default='', type=str, help='The export/outpu
 parser.add_argument('--threshold', default=10, type=int, help='The denoise threshold')
 arguments = parser.parse_args() 
 
+FILE_TYPES = ["bmp","jpg","jpeg","png"]
+
 def ignore_files(dir, files):
     return [f for f in files if os.path.isfile(os.path.join(dir, f))]
 
-def createExportDir(exportDirPath):
-    if os.path.exists(exportDirPath) == False:
-        print("Create Directory: " + str(exportDirPath))    
-        os.makedirs(exportDirPath, 0o0777)
+def collectImageFilePaths():
+    filePaths = []
+    for root, _, files in os.walk(arguments.input_dir):  
+        if root.endswith("/") is False:root+="/"
+        filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in FILE_TYPES])
+    return filePaths
+
+def copyTree():
+    if os.path.exists(arguments.export_dir):
+        try:
+            shutil.rmtree(arguments.export_dir)
+        except OSError as e:
+            print("Error: %s : %s" % (arguments.export_dir, e.strerror))   
+ 
+    shutil.copytree(arguments.input_dir,arguments.export_dir,ignore=ignore_files)
+    
+def printProgress(steps,max):
+    output = ""
+    for i in range(0,steps + 1):
+        output +="."
+    print("["+output+"]", str(int(round((steps/max)*100,0)))+"%") 
 
 def getDenoisedImage(image,threshold = 10):
     return cv2.fastNlMeansDenoisingColored(image,None,threshold,10,7,21) 
@@ -48,32 +67,27 @@ if __name__ == "__main__":
     assert arguments.export_dir and len(arguments.export_dir) > 0 , "Please check your export directory ..."
     if arguments.input_dir.endswith("/") is False:arguments.input_dir+="/"
     if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/"
-    createExportDir(arguments.export_dir)
     
-    if os.path.exists(arguments.export_dir):
-        try:
-            shutil.rmtree(arguments.export_dir)
-        except OSError as e:
-            print("Error: %s : %s" % (arguments.export_dir, e.strerror))   
- 
-    shutil.copytree(arguments.input_dir,arguments.export_dir,ignore=ignore_files)
+    ''' Creating export folder structure base on --input_dir structure '''
+    copyTree()     
     
-    for root, _, files in os.walk(arguments.input_dir): 
-        for file in files: 
-            exportDirPath = arguments.export_dir + str(root).replace(arguments.input_dir,"")
-            if exportDirPath.endswith("/") is False:exportDirPath+="/"  
-            if root.endswith("/") is False:root+="/"
-            image = cv2.imread(root + file)
-            if image is None:
-                print("Could not process file:",root + file)
-                continue      
-             
-            image = getDenoisedImage(image,arguments.threshold)  
-            cv2.imwrite(exportDirPath + file,image) 
-            sys.stdout.write(".")
-            sys.stdout.flush()
-                
-    print("FINISHED...")    
+    filePaths = collectImageFilePaths()
+    
+    step = 0
+    for filePath in filePaths:   
+        step += 1
+               
+        image = cv2.imread(filePath)
+        if image is None:
+            print("Could not process file:",filePath)
+            continue   
+        
+        cv2.imwrite(arguments.export_dir + str(filePath).replace(arguments.input_dir,""),getDenoisedImage(image,arguments.threshold)) 
+        
+        printProgress(step,len(filePaths))
+    
+    os.system('chmod 777 -R ' + arguments.export_dir)
+    print("FINISHED...")
      
     
     
