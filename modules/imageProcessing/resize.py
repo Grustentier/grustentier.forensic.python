@@ -71,6 +71,8 @@ if __name__ == "__main__":
     filePaths = collectImageFilePaths()
     
     step = 0
+    printProgress(step,len(filePaths))    
+    
     for filePath in filePaths:   
         step += 1        
          
