@@ -33,8 +33,8 @@ parser.add_argument('--label_export_dir', default=None, type=str, help='The expo
 parser.add_argument('--classes', default='person,car', type=str, help='Comma separated class names like person,bicycle,car,... or class indices like 0,1,2,... , or mixed.')
 arguments = parser.parse_args() 
 
-def ignore_files(dir, files):
-    return [f for f in files if os.path.isfile(os.path.join(dir, f))]
+def ignore_files(directory, files):
+    return [f for f in files if os.path.isfile(os.path.join(directory, f))]
 
 def getClasses2PredictFromRequestParameter():
     assert arguments.classes and len(arguments.classes) > 0, "Please check your input directory (--classes)..."
