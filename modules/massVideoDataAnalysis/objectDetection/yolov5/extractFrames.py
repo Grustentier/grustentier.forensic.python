@@ -182,7 +182,8 @@ def collectLabelFilePaths():
 
 def printProgress(steps,maximum):
     output = ""
-    for _ in range(0,steps + 1):
+    maxSteps2Console = 20
+    for _ in range(0,int((steps/maximum)*maxSteps2Console)):
         output +="."
     print("["+output+"]", str(int(round((steps/maximum)*100,0)))+"%") 
 
