@@ -22,7 +22,6 @@ __version__ = '0.1'
  
 import cv2
 import os 
-import sys
 import shutil
 import argparse
 
@@ -34,8 +33,7 @@ arguments = parser.parse_args()
 
 FILE_TYPES = ["bmp","jpg","jpeg","png"]
 
-def ignore_files(dir, files):
-    return [f for f in files if os.path.isfile(os.path.join(dir, f))]
+def ignore_files(directory, files):return [f for f in files if os.path.isfile(os.path.join(directory, f))]
 
 def collectImageFilePaths():
     filePaths = []
@@ -53,11 +51,11 @@ def copyTree():
  
     shutil.copytree(arguments.input_dir,arguments.export_dir,ignore=ignore_files)
     
-def printProgress(steps,max):
+def printProgress(steps,maximum):
     output = ""
-    for i in range(0,steps + 1):
+    for _ in range(0,steps + 1):
         output +="."
-    print("["+output+"]", str(int(round((steps/max)*100,0)))+"%") 
+    print("["+output+"]", str(int(round((steps/maximum)*100,0)))+"%")
 
 def getDenoisedImage(image,threshold = 10):
     return cv2.fastNlMeansDenoisingColored(image,None,threshold,10,7,21) 
@@ -89,8 +87,3 @@ if __name__ == "__main__":
     
     os.system('chmod 777 -R ' + arguments.export_dir)
     print("FINISHED...")
-     
-    
-    
- 
- 
