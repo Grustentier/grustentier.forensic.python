@@ -38,8 +38,8 @@ import argparse
 import matplotlib.pyplot as plt 
 
 parser = argparse.ArgumentParser(description='Image similarity by local alignment using Smith-Waterman algorithm.',formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--input_dir', default='', type=str, help='The input directory with separated frames/images')
-parser.add_argument('--export_dir', default='', type=str, help='The export directory path')  
+parser.add_argument('--input_dir', default='/home/grustentier/Bilder/data', type=str, help='The input directory with separated frames/images')
+parser.add_argument('--export_dir', default='/home/grustentier/Bilder/', type=str, help='The export directory path')  
 arguments = parser.parse_args() 
 
 FILE_TYPES = ["bmp","jpg","jpeg","png"]
@@ -145,14 +145,16 @@ def analyzeByHuMoments(imagePaths):
     createClusterMap(comatrix_d3,cols,names,arguments.export_dir+"clusterMap_CONTOURS_MATCH_I3.png")
 
 if __name__ == "__main__": 
-    assert arguments.input_dir and len(arguments.input_dir) > 0 and os.path.exists(arguments.input_dir) and os.path.isdir(arguments.input_dir), "Please check your input directory (--input_dir)"
-    assert arguments.export_dir and len(arguments.export_dir) > 0 , "Please check your export directory (--export_dir)"
+    assert arguments.input_dir and len(arguments.input_dir) > 0 and os.path.exists(arguments.input_dir) and os.path.isdir(arguments.input_dir), "Please check your input directory (--input_dir)..."
+    assert arguments.export_dir and len(arguments.export_dir) > 0 , "Please check your export directory (--export_dir)..."    
     if arguments.input_dir.endswith("/") is False:arguments.input_dir+="/"
-    if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/"
-    createExportDir(arguments.export_dir) 
+    if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/" 
     
-    filePaths = collectImageFilePaths() 
+    createExportDir(arguments.export_dir)     
+    
+    filePaths = collectImageFilePaths()     
     
     analyzeByHuMoments(filePaths) 
+    
     print("FINISHED...")
     
