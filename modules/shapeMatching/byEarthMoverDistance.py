@@ -284,9 +284,13 @@ if __name__ == "__main__":
     assert arguments.export_dir and len(arguments.export_dir) > 0 , "Please check your export directory (--export_dir)..."    
     if arguments.input_dir.endswith("/") is False:arguments.input_dir+="/"
     if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/" 
+    
     createExportDir(arguments.export_dir)  
-    filePaths = collectImageFilePaths()          
+    
+    filePaths = collectImageFilePaths()        
+      
     emdResults2Console(filePaths) 
+    
     print("FINISHED...")
                  
     
