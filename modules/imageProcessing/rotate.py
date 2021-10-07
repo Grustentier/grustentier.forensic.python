@@ -63,7 +63,6 @@ def printProgress(steps,maximum):
 if __name__ == "__main__":
     assert arguments.input_dir and len(arguments.input_dir) > 0 and os.path.exists(arguments.input_dir) and os.path.isdir(arguments.input_dir), "Please check your input directory (--input_dir)..."
     assert arguments.export_dir and len(arguments.export_dir) > 0 , "Please check your export directory (--export_dir) ..."
-    if not os.path.exists(arguments.export_dir): os.makedirs(arguments.export_dir, 775) 
     if arguments.input_dir.endswith("/") is False:arguments.input_dir+="/"
     if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/"     
     
