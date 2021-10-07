@@ -101,6 +101,7 @@ if __name__ == "__main__":
         image = cv2.imread(filePath)
         if image is None:
             print("Could not process file:",filePath)
+            printProgress(step,len(filePaths))
             continue
         
         if arguments.method == "default":

@@ -84,11 +84,13 @@ if __name__ == "__main__":
         image = cv2.imread(filePath)
         if image is None:
             print("Could not process image file:",filePath)
+            printProgress(step,len(filePaths))
             continue        
         
         cropped = image[arguments.start_y: arguments.end_y,arguments.start_x: arguments.end_x]
         if len(cropped) == 0:
             print("Could not process cropped image file:",filePath)
+            printProgress(step,len(filePaths))
             continue
         
         cv2.imwrite(arguments.export_dir + str(filePath).replace(arguments.input_dir,""),cropped)  

@@ -80,6 +80,7 @@ if __name__ == "__main__":
         image = cv2.imread(filePath)
         if image is None:
             print("Could not process file:",filePath)
+            printProgress(step,len(filePaths))
             continue
          
         cv2.imwrite(arguments.export_dir + str(filePath).replace(arguments.input_dir,""),imutils.rotate_bound(image, arguments.angle))

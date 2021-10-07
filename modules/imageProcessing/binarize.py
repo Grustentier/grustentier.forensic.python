@@ -76,6 +76,7 @@ if __name__ == "__main__":
         image = cv2.imread(filePath)
         if image is None:
             print("Could not process file:",filePath)
+            printProgress(step,len(filePaths))
             continue
         
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
