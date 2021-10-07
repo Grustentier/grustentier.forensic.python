@@ -56,9 +56,10 @@ def copyTree():
     
 def printProgress(steps,maximum):
     output = ""
-    for _ in range(0,steps + 1):
+    maxSteps2Console = 20
+    for _ in range(0,int((steps/maximum)*maxSteps2Console)):
         output +="."
-    print("["+output+"]", str(int(round((steps/maximum)*100,0)))+"%")
+    print("["+output+"]", str(int(round((steps/maximum)*100,0)))+"%") 
 
 def blur1(img,threshold = 5):
     kernel = numpy.ones((threshold,threshold),numpy.float32)/25

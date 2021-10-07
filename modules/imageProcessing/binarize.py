@@ -52,9 +52,10 @@ def copyTree():
     
 def printProgress(steps,maximum):
     output = ""
-    for _ in range(0,steps + 1):
+    maxSteps2Console = 20
+    for _ in range(0,int((steps/maximum)*maxSteps2Console)):
         output +="."
-    print("["+output+"]", str(int(round((steps/maximum)*100,0)))+"%")
+    print("["+output+"]", str(int(round((steps/maximum)*100,0)))+"%") 
      
 if __name__ == "__main__":
     assert arguments.input_dir and len(arguments.input_dir) > 0 and os.path.isdir(arguments.input_dir),"Please check your input directory (--input_dir)"
