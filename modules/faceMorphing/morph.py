@@ -35,10 +35,16 @@ import facemorpher
 parser = argparse.ArgumentParser(description='Code for feature detection.')
 parser.add_argument('--input_dir', default=None, help='Path to input dir with images to morph.')
 parser.add_argument('--export_dir', default=None, type=str, help='The export/output directory')
-parser.add_argument('--display', default=False, type=bool, help='Display morphing results in separate popups.')   
+parser.add_argument('--display', default=False, type=str, help='True or 1 for displaying morphing results in separate popups.')   
 arguments = parser.parse_args()
 
 FILE_TYPES = ["bmp","jpg","jpeg","png"]
+
+def boolean_string(s):
+    print(str(s).lower())
+    if str(s).lower() not in ['false', 'true', '1', '0']:
+        raise ValueError('Not a valid boolean string')
+    return str(s).lower() == 'true' or str(s).lower() == '1'
 
 def collectImageFilePaths():
     filePaths = []
@@ -74,12 +80,12 @@ if __name__ == "__main__":
     # Get a list of image paths in a folder
     imgpaths = facemorpher.list_imgpaths(arguments.input_dir)
     # To morph, supply an array of face images:
-    facemorpher.morpher(imgpaths,out_video=arguments.export_dir+"morph.avi", plot=arguments.display) 
+    facemorpher.morpher(imgpaths,out_video=arguments.export_dir+"morph.avi", plot=boolean_string(arguments.display)) 
     
     printProgress(1,2)
      
     # To average, supply an array of face images:
-    facemorpher.averager(collectImageFilePaths(), out_filename=arguments.export_dir+"morph.png",plot=arguments.display) 
+    facemorpher.averager(collectImageFilePaths(), out_filename=arguments.export_dir+"morph.png",plot=boolean_string(arguments.display)) 
      
     printProgress(2,2)
     
