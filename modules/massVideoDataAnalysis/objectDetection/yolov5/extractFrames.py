@@ -36,14 +36,20 @@ parser.add_argument('--label_database', default='', type=str, help='The root dir
 parser.add_argument('--video_database', default='', type=str, help='The root directory with included videos to find')  
 parser.add_argument('--classes', default='person,car', type=str, help='Comma separated class names like person,bicycle,car,... or class indices like 0,1,2,... , or mixed.')
 parser.add_argument('--probability', default=0.5, type=float, help='Min prediction probability')  
-parser.add_argument('--draw_boundingboxes', default=True, type=bool, help='True for drawing bounding boxes around predicted objects')
-parser.add_argument('--display', default=False, type=bool, help='Shows predicted video frames')
-parser.add_argument('--export_frames', default=True, type=bool, help='True for exporting image frames')
-parser.add_argument('--export_boundingboxes', default=False, type=bool, help='True for exporting only predicted boundingbox areas')
+parser.add_argument('--draw_boundingboxes', default=True, type=str, help='True or 1 for drawing bounding boxes around predicted objects')
+parser.add_argument('--display', default=False, type=str, help='True or 1 for showing predicted video frames')
+parser.add_argument('--export_frames', default=True, type=str, help='True or 1 for exporting image frames')
+parser.add_argument('--export_boundingboxes', default=False, type=str, help='True or 1 for exporting only predicted boundingbox areas')
 arguments = parser.parse_args()  
 
 LABEL_FILE_TYPES = ["txt"]
 VIDEO_FILE_TYPES = ["avi","mpg","mpeg","mp4"]
+
+def boolean_string(s):
+    print(str(s).lower())
+    if str(s).lower() not in ['false', 'true', '1', '0']:
+        raise ValueError('Not a valid boolean string')
+    return str(s).lower() == 'true' or str(s).lower() == '1'
 
 def cleanString(string,replacement='_'):
     a =  re.sub('[^a-zA-Z0-9.?]',replacement,string) 
@@ -106,10 +112,10 @@ def extractFrame():
         x1 = xcenter - (w / 2) 
         y1 = ycenter - (h / 2)
          
-        if arguments.draw_boundingboxes is True:          
+        if boolean_string(arguments.draw_boundingboxes) is True:          
             cv2.rectangle(frame,(int(x1),int(y1)),(int(x1+w),int(y1+h)),(0,255,0),2)
             
-        if arguments.export_boundingboxes is True: 
+        if boolean_string(arguments.export_boundingboxes) is True: 
             cv2.imwrite(EXPORT_DIR + "images/" + str(playTime)+"_"+str(frameIndex+1)+"_boundingbox.jpg",frame[int(y1): int(y1+h),int(x1): int(x1+w)] )
             
     file.close()
@@ -117,7 +123,7 @@ def extractFrame():
     processedClasses = sorted(processedClasses)
     
     if acceptEntry is True:
-        if arguments.export_frames is True:
+        if boolean_string(arguments.export_frames) is True:
             cv2.imwrite(EXPORT_DIR + "images/" + str(playTime)+"_"+str(frameIndex+1)+".jpg",frame)
         PROTOCOL.append({"text":"Objekt der Klasse: " + str(processedClasses)+", gefunden  in frame: " + str(frameIndex+1) + ", Spielzeit: " +str(playTime),"frame":frameIndex+1})
         return frame
@@ -260,7 +266,7 @@ if __name__ == "__main__":
                 if len(LABEL_FILE_PATHS) == 0:
                     break
                     
-                if arguments.display is True and frame is not None:
+                if boolean_string(arguments.display) is True and frame is not None:
                     cv2.imshow("Frame", frame)
                     ch = 0xFF & cv2.waitKey(1) # Wait for a second
                     if ch == 27:break 
@@ -280,14 +286,14 @@ if __name__ == "__main__":
                 if check is True:
                     frame = extractFrame()
         
-                if arguments.display is True and frame is not None:
+                if boolean_string(arguments.display) is True and frame is not None:
                     cv2.imshow("Frame", frame)
                     ch = 0xFF & cv2.waitKey(1) # Wait for a second
                     if ch == 27:break  
     
         video.release()    
         
-        if arguments.display is True:cv2.destroyAllWindows() 
+        if boolean_string(arguments.display) is True:cv2.destroyAllWindows() 
         
         exportProtocols(sorted(PROTOCOL, key=lambda x: x["frame"],reverse=False))   
         
