@@ -6,3 +6,6 @@ Furthermore, here are some scripts available for post-processing of data they co
 - YOLO (https://pypi.org/project/yolov5/)
 - OpenPose (https://github.com/CMU-Perceptual-Computing-Lab/openpose)
 - ...
+to support object detection in mass video data and to support the assessment of estimated poses for further anthropometric analysis.
+
+In future, this repo will be updated as soon as possible with scripts from other areas of digital forensics.
