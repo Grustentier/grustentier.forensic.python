@@ -29,9 +29,11 @@ print("""
 __version__ = '0.1'
 
 import os
+import sys
 import cv2  
 import json 
 import argparse
+sys.path.append(os.path.join(os.path.dirname(__file__), "..","..",".."))
 from modules.poseDetection.openpose.classes.RigPoints import RigPoints
 
 parser = argparse.ArgumentParser(description=' ')
@@ -39,11 +41,17 @@ parser.add_argument('--keypoint_dir', type=str,help='The path to parent dir with
 parser.add_argument('--image_dir', type=str,help='The path to dir with images to label', default='')
 parser.add_argument('--export_dir', type=str,help='The export directory path', default='')
 parser.add_argument('--circle_radius', type=int,help='The default ground circle radius for marked keypoints', default=3)  
-parser.add_argument('--display_ratios', type=bool,help='Show keypoint prediction ratios besides keypoints', default=True)
+parser.add_argument('--display_ratios', type=str,help='True or 1 for showing keypoint prediction ratios besides keypoints', default=True)
 arguments = parser.parse_args()
 
 IMAGE_FILE_TYPES = ["bmp","jpg","jpeg","png"]
 KEYPOINT_FILE_TYPES = ["json"]
+
+def boolean_string(s):
+    print(str(s).lower())
+    if str(s).lower() not in ['false', 'true', '1', '0']:
+        raise ValueError('Not a valid boolean string')
+    return str(s).lower() == 'true' or str(s).lower() == '1'
 
 def collectPoints(keypointFilePaths):  
     processableRigPoints = [] 
@@ -97,7 +105,7 @@ def plotPoints(pointData,image,thickness=3):
         cv2.circle(image, (int(coords[0]),int(coords[1])), int(radius) , color, thickness)
         radius = arguments.circle_radius
 
-    if arguments.display_ratios is True:
+    if boolean_string(arguments.display_ratios) is True:
         font = cv2.FONT_HERSHEY_SIMPLEX
         #bottomLeftCornerOfText = (int(coords[0]) + (2*int(radius)),int(coords[1]) + (1*int(radius)))
         fontScale              = 0.4
