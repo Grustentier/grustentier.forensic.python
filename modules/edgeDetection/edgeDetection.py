@@ -21,13 +21,14 @@ parser.add_argument('--canny_smoothing', default=False, type=str, help='True for
 parser.add_argument('--invert', default=False, type=str, help='True for inverting image')
 arguments = parser.parse_args()
 
+
+FILE_TYPES = ["bmp","jpg","jpeg","png"]
+
 def boolean_string(s):
     print(str(s).lower())
     if str(s).lower() not in ['false', 'true', '1', '0']:
         raise ValueError('Not a valid boolean string')
     return str(s).lower() == 'true' or str(s).lower() == '1'
-
-FILE_TYPES = ["bmp","jpg","jpeg","png"]
 
 def ignore_files(directory, files):return [f for f in files if os.path.isfile(os.path.join(directory, f))]
 
