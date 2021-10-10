@@ -53,7 +53,7 @@ def printProgress(steps,maximum):
 def collectImageFilePaths():
     filePaths = []
     for root, _, files in os.walk(arguments.image_dir):  
-        if root.endswith("/") is False:root+="/"
+        if root.endswith(os.sep) is False:root+=os.sep
         filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in FILE_TYPES])
     return filePaths
 
@@ -198,8 +198,8 @@ if __name__ == "__main__":
     assert arguments.image_dir and len(arguments.image_dir) > 0 and os.path.exists(arguments.image_dir) and os.path.isdir(arguments.image_dir), "Please check your directory path with images to calibrate (--image_dir)..."
     assert arguments.export_dir and len(arguments.export_dir) > 0 , "Please check your export directory ..."
     if not os.path.exists(arguments.export_dir): os.makedirs(arguments.export_dir, 775) 
-    if arguments.image_dir.endswith("/") is False:arguments.image_dir+="/"
-    if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/"     
+    if arguments.image_dir.endswith(os.sep) is False:arguments.image_dir+=os.sep
+    if arguments.export_dir.endswith(os.sep) is False:arguments.export_dir+=os.sep     
     createExportDir(arguments.export_dir)
     assert str(arguments.method).lower() == "sift" or str(arguments.method).lower() == "surf" or str(arguments.method).lower() == "orb" or str(arguments.method).lower() == "ecc"  , "Please select a method for feature detection (sift, surf, orb, ecc) ..."
    
