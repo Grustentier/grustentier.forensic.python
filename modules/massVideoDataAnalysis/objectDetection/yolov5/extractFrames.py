@@ -62,7 +62,7 @@ def createExportDir(exportDirPath):
 def getLabelFile2FrameIndex(frameIndex):
     for i in range(0,len(LABEL_FILE_PATHS)):
         labelPath = LABEL_FILE_PATHS[i]
-        filename = str(labelPath).split("/")[-1]
+        filename = str(labelPath).split(os.sep)[-1]
         filename = str(filename).split(".")[-2]
         labelIndex = str(filename).split("_")[-1]
         
@@ -148,15 +148,15 @@ def getSubDirectories(dirname):
     return sorted(subfolders)
  
 def findVideo(parentLabelDir):    
-    videoName2Find = str(parentLabelDir).split("/")[-1]     
+    videoName2Find = str(parentLabelDir).split(os.sep)[-1]     
     videoName2Find = cleanString(videoName2Find)
-    parentDirVideoName2Find = str(parentLabelDir).split("/")[-2]  
+    parentDirVideoName2Find = str(parentLabelDir).split(os.sep)[-2]  
     parentDirVideoName2Find = cleanString(parentDirVideoName2Find)
     
     for videoPath in VIDEO_DATABASE:
-        videoName = str(videoPath).split("/")[-1]
+        videoName = str(videoPath).split(os.sep)[-1]
         videoName = cleanString(videoName)
-        parentDirVideoName = str(videoPath).split("/")[-2]
+        parentDirVideoName = str(videoPath).split(os.sep)[-2]
         parentDirVideoName = cleanString(parentDirVideoName)
         
         if str(parentDirVideoName2Find).lower() == str(parentDirVideoName).lower() and str(videoName2Find).lower() == str(videoName).lower():
@@ -175,14 +175,14 @@ def removeExistingExportDir(exportDirPath):
 def collectVideoFilePaths():
     filePaths = []
     for root, _, files in os.walk(arguments.video_database):  
-        if root.endswith("/") is False:root+="/"
+        if root.endswith(os.sep) is False:root+=os.sep
         filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in VIDEO_FILE_TYPES])
     return filePaths  
             
 def collectLabelFilePaths():
     filePaths = []
     for root, _, files in os.walk(labelDir):  
-        if root.endswith("/") is False:root+="/"
+        if root.endswith(os.sep) is False:root+=os.sep
         filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in LABEL_FILE_TYPES])
     return filePaths 
 
@@ -197,8 +197,8 @@ if __name__ == "__main__":
     
     '''label_database'''
     assert arguments.label_database and len(arguments.label_database) > 0 and os.path.exists(arguments.label_database) and os.path.isdir(arguments.label_database), "Please check your input directory (--label_database)..."
-    if arguments.label_database.endswith("/") is False:arguments.label_database+="/"    
-    labelDirs = [sub for sub in getSubDirectories(arguments.label_database) if str(sub).split("/")[-1] == "labels"]       
+    if arguments.label_database.endswith(os.sep) is False:arguments.label_database+=os.sep    
+    labelDirs = [sub for sub in getSubDirectories(arguments.label_database) if str(sub).split(os.sep)[-1] == "labels"]       
     
     '''video_database'''
     assert arguments.video_database and len(arguments.video_database) > 0 and os.path.exists(arguments.video_database) and os.path.isdir(arguments.video_database), "Please check your input directory (--video_database)..."
@@ -221,7 +221,7 @@ if __name__ == "__main__":
         step += 1    
         
         parentDirPath = os.path.abspath(os.path.join(labelDir, os.pardir)) 
-        parentDirName = str(parentDirPath).split("/")[-1]
+        parentDirName = str(parentDirPath).split(os.sep)[-1]
         
         currentVideoPath = findVideo(parentDirPath)
         if currentVideoPath is None:
@@ -278,7 +278,7 @@ if __name__ == "__main__":
             Fast Solution. Only processing relevant video frames from corresponding label index.
             '''
             for labelPath in LABEL_FILE_PATHS:
-                filename = str(labelPath).split("/")[-1]
+                filename = str(labelPath).split(os.sep)[-1]
                 filename = str(filename)[0:str(filename).rindex(".")] 
                 frameIndex = int(str(filename).split("_")[-1]) - 1
                 video.set(cv2.CAP_PROP_POS_FRAMES,frameIndex) 

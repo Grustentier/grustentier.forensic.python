@@ -33,8 +33,7 @@ parser.add_argument('--label_export_dir', default=None, type=str, help='The expo
 parser.add_argument('--classes', default='person,car', type=str, help='Comma separated class names like person,bicycle,car,... or class indices like 0,1,2,... , or mixed.')
 arguments = parser.parse_args() 
 
-def ignore_files(directory, files):
-    return [f for f in files if os.path.isfile(os.path.join(directory, f))]
+def ignore_files(directory, files):return [f for f in files if os.path.isfile(os.path.join(directory, f))]
 
 def getClasses2PredictFromRequestParameter():
     assert arguments.classes and len(arguments.classes) > 0, "Please check your input directory (--classes)..."
@@ -56,9 +55,9 @@ def getClasses2PredictFromRequestParameter():
 
 if __name__ == "__main__":
     assert arguments.video_dir and len(arguments.video_dir) > 0 and os.path.isdir(arguments.video_dir),"Please check your video directory (--video_dir)" 
-    if arguments.video_dir.endswith("/") is False:arguments.video_dir+="/"  
+    if arguments.video_dir.endswith(os.sep) is False:arguments.video_dir+=os.sep  
     assert arguments.label_export_dir and arguments.label_export_dir is not None,"Please check your export directory (--label_export_dir)" 
-    if arguments.label_export_dir.endswith("/") is False:arguments.label_export_dir+="/"
+    if arguments.label_export_dir.endswith(os.sep) is False:arguments.label_export_dir+=os.sep
     
     CLASSES = getClasses2PredictFromRequestParameter() 
     
@@ -72,10 +71,10 @@ if __name__ == "__main__":
     
     for root, _, files in os.walk(arguments.video_dir): 
         for file in files:           
-            if root.endswith("/") is False:root+="/" 
+            if root.endswith(os.sep) is False:root+=os.sep 
             filePath = root + file
             exportDirPath = arguments.label_export_dir + str(root).replace(arguments.video_dir,"")  
-            if exportDirPath.endswith("/") is False:exportDirPath+="/"
+            if exportDirPath.endswith(os.sep) is False:exportDirPath+=os.sep
             #yolo_detect --source filePath --save-txt --save-conf --classes 0 2 --project $2 --nosave --name file --weights yolov5x.pt
             os.system("yolo_detect --source "+filePath+" --save-txt --save-conf --classes "+CLASSES+" --project "+exportDirPath+" --nosave --name "+file+" --weights yolov5x.pt")
      
