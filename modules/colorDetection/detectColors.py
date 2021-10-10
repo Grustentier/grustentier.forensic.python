@@ -209,15 +209,14 @@ if __name__ == "__main__":
     RASTER_CLASSES = getRasterClasses() 
 
     step = 0
-    printProgress(step,len(OPENCV_METHODS)+len(K_WINNERS)) 
+    printProgress(step,len(K_WINNERS)) 
     for k in K_WINNERS:
-        k_winners = k        
+        k_winners = k    
+        step+=1    
         for methodId in range(0,len(OPENCV_METHODS)):
-            step+=1
-             
             print("\nSeach similar histograms using method:",str(OPENCV_METHODS[methodId][0]))
             compareHistograms()            
-            printProgress(step,len(OPENCV_METHODS)+len(K_WINNERS))         
+        printProgress(step,len(K_WINNERS))         
     
     os.system('chmod 777 -R ' + arguments.export_dir)   
     print("FINISHED...") 
