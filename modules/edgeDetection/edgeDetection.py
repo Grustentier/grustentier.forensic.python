@@ -35,7 +35,7 @@ def ignore_files(directory, files):return [f for f in files if os.path.isfile(os
 def collectImageFilePaths():
     filePaths = []
     for root, _, files in os.walk(arguments.input_dir):  
-        if root.endswith("/") is False:root+="/"
+        if root.endswith(os.sep) is False:root+=os.sep
         filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in FILE_TYPES])
     return filePaths
 
@@ -97,10 +97,10 @@ def processCanny(img):
 if __name__ == "__main__": 
     print("Check input_dir parameters ...")
     assert arguments.input_dir and arguments.input_dir is not None and os.path.exists(arguments.input_dir) and os.path.isdir(arguments.input_dir), "\n ### Please check your input_dir directory (-input_dir)... ###"
-    if arguments.input_dir.endswith("/") is False:arguments.input_dir+="/"
+    if arguments.input_dir.endswith(os.sep) is False:arguments.input_dir+=os.sep
     assert arguments.export_dir and arguments.export_dir is not None , "Please check your export directory ..."
     if not os.path.exists(arguments.export_dir): os.makedirs(arguments.export_dir, 775) 
-    if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/"
+    if arguments.export_dir.endswith(os.sep) is False:arguments.export_dir+=os.sep
     
     ''' Creating export folder structure base on --input_dir structure '''
     copyTree()     
