@@ -49,7 +49,7 @@ def boolean_string(s):
 def collectImageFilePaths():
     filePaths = []
     for root, _, files in os.walk(arguments.input_dir):  
-        if root.endswith("/") is False:root+="/"
+        if root.endswith(os.sep) is False:root+=os.sep
         filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in FILE_TYPES])
     return filePaths
 
@@ -68,9 +68,9 @@ def printProgress(steps,maximum):
 
 if __name__ == "__main__":
     assert arguments.input_dir and arguments.input_dir is not None and len(arguments.input_dir) > 0 and os.path.exists(arguments.input_dir) and os.path.isdir(arguments.input_dir), "Please check your input directory (--input_dir)..."
-    if arguments.input_dir.endswith("/") is False:arguments.input_dir+="/"
+    if arguments.input_dir.endswith(os.sep) is False:arguments.input_dir+=os.sep
     assert arguments.export_dir and arguments.export_dir is not None and len(arguments.export_dir) > 0 , "Please check your export directory (--export_dir)"
-    if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/"     
+    if arguments.export_dir.endswith(os.sep) is False:arguments.export_dir+=os.sep     
     
     createExportDir(arguments.export_dir)  
     
