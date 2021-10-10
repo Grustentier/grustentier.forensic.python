@@ -37,11 +37,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..","..",".."))
 from modules.poseDetection.openpose.classes.RigPoints import RigPoints
 
 parser = argparse.ArgumentParser(description=' ')
-parser.add_argument('--keypoint_dir', type=str,help='The path to parent dir with keypoint json files', default='') 
-parser.add_argument('--image_dir', type=str,help='The path to dir with images to label', default='')
-parser.add_argument('--export_dir', type=str,help='The export directory path', default='')
-parser.add_argument('--circle_radius', type=int,help='The default ground circle radius for marked keypoints', default=3)  
-parser.add_argument('--display_ratios', type=str,help='True or 1 for showing keypoint prediction ratios besides keypoints', default=True)
+parser.add_argument('--keypoint_dir', type=str, help='The path to parent dir with keypoint json files', default='') 
+parser.add_argument('--image_dir', type=str, help='The path to dir with images to label', default='')
+parser.add_argument('--export_dir', type=str, help='The export directory path', default='')
+parser.add_argument('--circle_radius', type=int, help='The default ground circle radius for marked keypoints', default=3)  
+parser.add_argument('--display_ratios', type=str, help='True or 1 for showing keypoint prediction ratios besides keypoints', default=True)
 arguments = parser.parse_args()
 
 IMAGE_FILE_TYPES = ["bmp","jpg","jpeg","png"]
@@ -121,7 +121,7 @@ def plotPoints(pointData,image,thickness=3):
         
 def findImageFilePath(imageFilePaths,keypointFileName):
     for imageFilePath in imageFilePaths: 
-        imageFileName = str(imageFilePath).split("/")[-1]
+        imageFileName = str(imageFilePath).split(os.sep)[-1]
         if "_" in imageFileName:
             imageFileName = str(imageFileName)[0:str(imageFileName).rindex("_")] 
         if "." in imageFileName:
@@ -146,24 +146,24 @@ def printProgress(steps,maximum):
 def collectImageFilePaths():
     filePaths = []
     for root, _, files in os.walk(arguments.image_dir):  
-        if root.endswith("/") is False:root+="/"
+        if root.endswith(os.sep) is False:root+=os.sep
         filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in IMAGE_FILE_TYPES])
     return filePaths
 
 def collectKeypointFilePaths():
     filePaths = []
     for root, _, files in os.walk(arguments.keypoint_dir):  
-        if root.endswith("/") is False:root+="/"
+        if root.endswith(os.sep) is False:root+=os.sep
         filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in KEYPOINT_FILE_TYPES])
     return filePaths
 
 if __name__ == "__main__": 
     assert arguments.image_dir and len(arguments.image_dir) > 0 and os.path.exists(arguments.image_dir) and os.path.isdir(arguments.image_dir), "Please check your input directory (--image_dir)..."
-    if arguments.image_dir.endswith("/") is False:arguments.image_dir+="/"    
+    if arguments.image_dir.endswith(os.sep) is False:arguments.image_dir+=os.sep    
     assert arguments.keypoint_dir and len(arguments.keypoint_dir) > 0 and os.path.exists(arguments.keypoint_dir) and os.path.isdir(arguments.keypoint_dir), "Please check your input directory (--keypoint_dir)..."
-    if arguments.keypoint_dir.endswith("/") is False:arguments.keypoint_dir+="/"
+    if arguments.keypoint_dir.endswith(os.sep) is False:arguments.keypoint_dir+=os.sep
     assert arguments.export_dir and len(arguments.export_dir) > 0 , "Please check your export directory ..."
-    if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/" 
+    if arguments.export_dir.endswith(os.sep) is False:arguments.export_dir+=os.sep 
         
     createExportDir(arguments.export_dir) 
     
@@ -178,7 +178,7 @@ if __name__ == "__main__":
     for data in rigPoints2File:
         step+=1
         keyointFilePath = data["filePath"]
-        keyointFileName = str(keyointFilePath).split("/")[-1]
+        keyointFileName = str(keyointFilePath).split(os.sep)[-1]
         if "_" in keyointFileName:
             keyointFileName = str(keyointFileName)[0:str(keyointFileName).rindex("_")] 
         if "." in keyointFileName:
@@ -192,7 +192,7 @@ if __name__ == "__main__":
         image2Label = cv2.imread(imageFilePath)
         labeledImage = points2Image(data["pointData"],image2Label)
         
-        imageName = str(imageFilePath).split("/")[-1]
+        imageName = str(imageFilePath).split(os.sep)[-1]
         
         cv2.imwrite(arguments.export_dir+imageName,labeledImage)
         
