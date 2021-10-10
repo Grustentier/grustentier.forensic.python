@@ -47,7 +47,7 @@ FILE_TYPES = ["bmp","jpg","jpeg","png"]
 def collectImageFilePaths():
     filePaths = []
     for root, _, files in os.walk(arguments.input_dir):  
-        if root.endswith("/") is False:root+="/"
+        if root.endswith(os.sep) is False:root+=os.sep
         filePaths.extend([root + file for file in files if str(file).split(".")[-1].lower() in FILE_TYPES])
     return filePaths
 
@@ -92,13 +92,13 @@ def analyzeByHuMoments(imagePaths):
     step = 0
     for i in range(0,len(imagePaths)): 
         step += 1
-        imageName1 = imagePaths[i][imagePaths[i].rfind("/")+1:]
+        imageName1 = imagePaths[i][imagePaths[i].rfind(os.sep)+1:]
         im1 = cv2.imread(imagePaths[i],cv2.IMREAD_GRAYSCALE)
         matrixEntry_d1 = [] 
         matrixEntry_d2 = []
         matrixEntry_d3 = []
         for j in range(0,len(imagePaths)):           
-            imageName2 = imagePaths[j][imagePaths[j].rfind("/")+1:]        
+            imageName2 = imagePaths[j][imagePaths[j].rfind(os.sep)+1:]        
             parentFolderName = os.path.abspath(os.path.join(imagePaths[j], os.pardir))
             parentFolderName = os.path.basename(parentFolderName)
             imageName2 = parentFolderName + "->" + imageName2 
@@ -139,7 +139,7 @@ def analyzeByHuMoments(imagePaths):
     for d3s in sorted_d3s: print(d3s)
     
     cols = [str(i) for i in range(0,len(imagePaths))]
-    names = [imagePaths[i].split("/")[-1].split(".")[0] for i in range(0,len(imagePaths))]  
+    names = [imagePaths[i].split(os.sep)[-1].split(".")[0] for i in range(0,len(imagePaths))]  
     createClusterMap(comatrix_d1,cols,names,arguments.export_dir+"clusterMap_CONTOURS_MATCH_I1.png")   
     createClusterMap(comatrix_d2,cols,names,arguments.export_dir+"clusterMap_CONTOURS_MATCH_I2.png")
     createClusterMap(comatrix_d3,cols,names,arguments.export_dir+"clusterMap_CONTOURS_MATCH_I3.png")
@@ -147,8 +147,8 @@ def analyzeByHuMoments(imagePaths):
 if __name__ == "__main__": 
     assert arguments.input_dir and len(arguments.input_dir) > 0 and os.path.exists(arguments.input_dir) and os.path.isdir(arguments.input_dir), "Please check your input directory (--input_dir)..."
     assert arguments.export_dir and len(arguments.export_dir) > 0 , "Please check your export directory (--export_dir)..."    
-    if arguments.input_dir.endswith("/") is False:arguments.input_dir+="/"
-    if arguments.export_dir.endswith("/") is False:arguments.export_dir+="/" 
+    if arguments.input_dir.endswith(os.sep) is False:arguments.input_dir+=os.sep
+    if arguments.export_dir.endswith(os.sep) is False:arguments.export_dir+=os.sep 
     
     createExportDir(arguments.export_dir)     
     
