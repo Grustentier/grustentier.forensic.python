@@ -40,10 +40,20 @@ parser.add_argument('--raster_image_dir', default="."+os.sep+"testdata"+os.sep+"
 parser.add_argument('--export_dir', default="."+os.sep+"testdata"+os.sep+"results"+os.sep+"", type=str, help='The export directory')
 parser.add_argument('--raster_window_size', default=10, type=int, help='The size for flying window during the rastering process of --image_path.')
 parser.add_argument('--raster_window_step', default=10, type=int, help='The window moving step (x to xn and y to yn) during the raster process of --image_path.')
+parser.add_argument('--color_legend', default=False, type=str, help='The color legend representing distance value ranges')
 arguments = parser.parse_args()
 
 FILE_TYPES = ["bmp","jpg","jpeg","png"]
 K_WINNERS=[3,6,12,24,48]
+
+COLORS2RANGE = {}
+COLORS2RANGE["0.0-0.599"]=[0,0,0]
+COLORS2RANGE["0.60-0.699"]=[79,79,79]
+COLORS2RANGE["0.70-0.799"]=[179,179,179]
+COLORS2RANGE["0.80-0.899"]=[222,222,222]
+COLORS2RANGE["0.90-1.00"]=[255,255,255]
+
+SORTED_COLORS = [[255,255,255],[222,222,222],[179,179,179],[79,79,79],[0,0,0]]
 
 OPENCV_METHODS = list()
 OPENCV_METHODS.append(("Correlation-(winner=max)", cv2.HISTCMP_CORREL,"max"))
@@ -143,19 +153,13 @@ def compareHistograms():
         exportResult(currentResult[:k_winners],methodId) 
         currentResult = [] 
 
-def getColorFromRange(value):
-    COLORS = {}
-    COLORS["0.0-0.599"]=[100,100,0]
-    COLORS["0.60-0.699"]=[0,255,0]
-    COLORS["0.70-0.799"]=[0,100,100]
-    COLORS["0.80-0.899"]=[0,45,100]
-    COLORS["0.90-1.00"]=[0,0,255]
-    for rangeKey in COLORS.keys():
+def getColorFromRange(value):    
+    for rangeKey in COLORS2RANGE.keys():
         lower = float(rangeKey.split("-")[0])
         upper = float(rangeKey.split("-")[1])
         if value >= lower and value <= upper:
-            return COLORS[rangeKey]
-    return [100,0,100]
+            return COLORS2RANGE[rangeKey]
+    return [0,0,0]
 
 def exportResult(result,methodId):    
     df_copy = IMAGE_2_FIND_COLORS.copy() 
@@ -170,6 +174,17 @@ def exportResult(result,methodId):
         endY = topK["area"][3]
         cv2.rectangle(df_copy, (int(startX), int(startY)), (int(endX), int(endY)), getColorFromRange(topK["value"]), 2)
         print(str(kIndex)+".\t"+str(round(topK["value"],3))+"\t"+str(startX)+"\t"+str(startY)+"\t"+str(endX)+"\t"+str(endY)+"\t"+topK["rasterClass"])
+        
+    if boolean_string(arguments.color_legend) is True:
+        frame_height, frame_width = df_copy.shape[:2]  
+        colorSegmentWidth = int(round(frame_width / len(SORTED_COLORS),0))
+        last_x = 0
+        for sortedColor in SORTED_COLORS:
+            for _ in range(1,colorSegmentWidth):
+                for y in range(1,10):
+                    df_copy[frame_height-y,last_x] = sortedColor
+                last_x = last_x + 1
+            
     cv2.imwrite(arguments.export_dir+OPENCV_METHODS[methodId][0].split("-")[0]+os.sep+str(arguments.image_path.split(os.sep)[-1].split(".")[0])+"_k:"+str(k_winners)+"_windowStep:"+str(arguments.raster_window_step)+"_windowSize:"+str(arguments.raster_window_size)+"_class:"+topK["rasterClass"]+"_"+".png",df_copy)
  
 def checkParameters():
