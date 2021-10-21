@@ -76,6 +76,7 @@ if __name__ == "__main__":
             exportDirPath = arguments.label_export_dir + str(root).replace(arguments.video_dir,"")  
             if exportDirPath.endswith(os.sep) is False:exportDirPath+=os.sep
             #yolo_detect --source filePath --save-txt --save-conf --classes 0 2 --project $2 --nosave --name file --weights yolov5x.pt
-            os.system("yolo_detect --source "+filePath+" --save-txt --save-conf --classes "+CLASSES+" --project "+exportDirPath+" --nosave --name "+file+" --weights yolov5x.pt")
+            #os.system("yolo_detect --source "+filePath+" --save-txt --save-conf --classes "+CLASSES+" --project "+exportDirPath+" --nosave --name "+file+" --weights yolov5x.pt")
+            os.system("yolov5 detect --source "+filePath+" --save-txt --save-conf --classes "+CLASSES+" --project "+exportDirPath+" --nosave --name "+file+" --weights yolov5x.pt")
      
     os.chmod(arguments.label_export_dir, 0o777) 
