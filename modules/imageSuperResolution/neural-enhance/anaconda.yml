@@ -1,0 +1,51 @@
+name: neural-enhance
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=4.5=1_gnu
+  - ca-certificates=2021.10.8=ha878542_0
+  - certifi=2021.10.8=py39hf3d152e_1
+  - ld_impl_linux-64=2.35.1=h7274673_9
+  - libblas=3.9.0=11_linux64_openblas
+  - libcblas=3.9.0=11_linux64_openblas
+  - libffi=3.3=he6710b0_2
+  - libgcc-ng=9.3.0=h5101ec6_17
+  - libgfortran-ng=11.2.0=h69a702a_11
+  - libgfortran5=11.2.0=h5c6108e_11
+  - libgomp=9.3.0=h5101ec6_17
+  - libgpuarray=0.7.6=h7f98852_1003
+  - liblapack=3.9.0=11_linux64_openblas
+  - libopenblas=0.3.17=pthreads_h8fe5266_1
+  - libstdcxx-ng=9.3.0=hd4cf53a_17
+  - mako=1.1.6=pyhd8ed1ab_0
+  - markupsafe=2.0.1=py39h3811e60_0
+  - ncurses=6.3=h7f8727e_2
+  - openssl=1.1.1l=h7f8727e_0
+  - pip=21.2.4=py39h06a4308_0
+  - pygpu=0.7.6=py39hce5d2b2_1002
+  - python=3.9.7=h12debd9_1
+  - python_abi=3.9=2_cp39
+  - readline=8.1=h27cfd23_0
+  - setuptools=58.0.4=py39h06a4308_0
+  - six=1.16.0=pyh6c4a22f_0
+  - sqlite=3.36.0=hc218d9a_0
+  - tk=8.6.11=h1ccaba5_0
+  - tzdata=2021e=hda174b7_0
+  - wheel=0.37.0=pyhd3eb1b0_1
+  - xz=5.2.5=h7b6447c_0
+  - zlib=1.2.11=h7b6447c_3
+  - pip:
+    - appdirs==1.4.4
+    - colorama==0.4.4
+    - imageio==2.11.1
+    - lasagne==0.2.dev1
+    - numpy==1.21.4
+    - pillow==8.4.0
+    - pycuda==2021.1
+    - pytools==2021.2.9
+    - scikit-cuda==0.5.4
+    - scipy==1.7.2
+    - theano==1.0.5
+prefix: /root/anaconda3/envs/neural-enhance
